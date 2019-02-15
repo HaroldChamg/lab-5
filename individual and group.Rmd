@@ -1,0 +1,77 @@
+```{r}
+library(tidyverse)
+# Load and view the data
+milk <- read.csv('state_milk_production.csv')
+milk
+```
+
+```{r}
+milk<-milk %>%
+  mutate(milk_million = milk_produced/1000000)
+milk1996 <- milk %>%
+  filter(year == 1996)
+ggplot(data = milk1996, aes(x = milk_million)) +
+  geom_density() + 
+  ggtitle('Distribution estimate of milk produced in 1996 by state')
+```
+```{r}
+statemilk <- milk1996 %>%
+group_by(state)%>%
+summarise(avgproduction = mean(milk_million, na.rm = TRUE))
+statemilk
+```
+
+```{r}
+statemilk2 <- milk1996 %>%
+group_by(state)%>%
+summarise(medianproduction = median(milk_million, na.rm = TRUE))
+statemilk2
+```
+
+```{r}
+
+```
+
+```{r}
+most <-milk1996%>%
+  group_by(state)%>%
+  summarise(max = max(milk_million))
+  arrange((milk_million))
+
+library(dplyr)
+most[with(most, order(-max)), ]
+```
+
+
+```{r}
+least <-milk1996%>%
+  group_by(state)%>%
+  summarise(min = min(milk_million))
+  arrange((milk_million))
+  
+least
+
+library(dplyr)
+least[with(least, order(min)), ] 
+```
+
+Group:
+The year when the most milk was produced in the United States.
+The year when the least milk was produced in the United States.
+
+```{r}
+yearmost <-milk%>%
+  group_by(year)%>%
+  summarize(totalmilk = sum(milk_million))%>%
+  arrange(desc(totalmilk))
+ yearmost 
+```
+
+```{r}
+group_by(milk,year)%>%
+  summarise(totalmilk = sum(milk_million))%>%
+  arrange((totalmilk))
+```
+
+
+
