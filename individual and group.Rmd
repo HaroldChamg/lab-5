@@ -73,5 +73,7 @@ group_by(milk,year)%>%
   arrange((totalmilk))
 ```
 
+What I have done: Finished my individual work with an organizaed way, tried to help the fellas when they ran into problem, did the analysis for the group.
+
 
 
