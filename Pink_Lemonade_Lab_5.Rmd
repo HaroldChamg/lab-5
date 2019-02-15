@@ -1,0 +1,299 @@
+---
+title: "Pink_Lemonade_LA5"
+author: "Pink Lemonade- Lucas Brack, Jon Guay, Max Ward, Harold Chang"
+date: "February 15, 2019"
+output: html_document
+---
+#Team Plots
+```{r setup, include=FALSE, results='hide', message = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+milk <- read.csv('state_milk_production.csv')
+milk <- milk %>%
+  mutate(milk_million = milk_produced/1000000)
+```
+##Average Milk Production for 5 States Since 1970
+```{r, echo = FALSE, message = FALSE}
+
+averageplot <- milk %>%
+
+  filter(state %in% c('Wisconsin', 'Florida', 'Colorado', 'Texas', 'California')) %>%
+
+           select(state,year,milk_million) %>%
+
+  group_by(year,state) %>%
+
+  summarize(avg = mean(milk_million))
+
+
+```
+
+```{r, echo = FALSE, message = FALSE}
+
+Jonteampart <- milk %>%
+
+  filter(state %in% c('Wisconsin', 'Florida', 'Colorado', 'Texas', 'California')) %>%
+
+           select(state,year,milk_million)
+
+ggplot(data = Jonteampart, aes(x = year, y = milk_million, color = state)) +
+
+  geom_point() + 
+
+  ggtitle('Pounds of milk over time by state') +
+
+  xlab('Year') +
+
+  ylab('Milk Produced (Million lb)') +
+
+  geom_smooth(data = averageplot, mapping = aes(x = year, y = avg))
+
+```
+
+
+This plot lets us know that Wisconsin was the largest milk producer  of these 5 states in 1970, but then was overtaken by california in about 1995.  The other 3 states stayed right around their normal production, with colorado and Texas slightly increasing, and Florida experiencing a slight decrease in overall production.
+
+##Year With the Most Milk Production
+
+```{r, echo = FALSE, message = FALSE}
+
+yearmost <-milk%>%
+
+  group_by(year)%>%
+
+  summarize(totalmilk = sum(milk_million))%>%
+
+  arrange(desc(totalmilk))
+
+yearmost
+
+```
+
+##Year With the Least Milk Production 
+
+```{r, echo = FALSE, message = FALSE}
+
+group_by(milk,year)%>%
+
+  summarise(totalmilk = sum(milk_million))%>%
+
+  arrange((totalmilk))
+
+
+```
+
+##Most Milk Produced in 2017
+
+```{r, echo = FALSE, message = FALSE}
+
+MaxTeam <- milk %>%
+
+  filter(year == 2017)%>%
+
+  group_by(state)%>%
+
+  arrange(desc(milk_million))
+
+MaxTeam
+
+```
+
+As we can see from the data in 2017 the top five states in milk production were Califorina, Wisconsin, New York, Idaho and Texas.
+
+##Least Milk Produced 2017
+```{r, echo = FALSE, message = FALSE}
+
+MaxTeam <- milk %>%
+
+  filter(year == 2017)%>%
+
+  group_by(state)%>%
+
+  arrange(desc(-milk_million))
+
+MaxTeam
+
+```
+
+As we can see for this data is that in 2017 the lowest five states in milk production were Alaska, Rhode Island, Hawaii, Arkansas and Alabama.
+
+#Individual Plots
+
+###Jon Guay
+```{r, echo = FALSE, message = FALSE}
+
+milk_1999 <- milk %>%
+
+  filter(year == 1999)
+
+ggplot(data = milk_1999) +
+
+geom_density(mapping = aes(x = milk_million)) +
+
+  ggtitle('Distribution of Milk for my Birth Year: 1999')
+
+```
+
+```{r, echo = FALSE, message = FALSE}
+
+Part2 <- milk %>%
+
+  filter(year == 1999) %>%
+
+  summarize(average = mean(milk_million),
+
+            middle = median(milk_million), max(milk_million),min(milk_million))
+
+Part2
+
+```
+
+###Harold Chang
+```{r, echo = FALSE, message = FALSE}
+
+milk1996 <- milk %>%
+
+  filter(year == 1996)
+
+ggplot(data = milk1996, aes(x = milk_million)) +
+
+  geom_density() + 
+
+  ggtitle('Distribution estimate of milk produced in 1996 by state')
+
+```
+
+```{r, echo = FALSE, message = FALSE}
+
+statemilk <- milk1996 %>%
+
+group_by(state)%>%
+
+summarise(avgproduction = mean(milk_million, na.rm = TRUE))
+
+statemilk
+
+```
+
+```{r, echo = FALSE, message = FALSE}
+
+statemilk2 <- milk1996 %>%
+
+group_by(state)%>%
+
+summarise(medianproduction = median(milk_million, na.rm = TRUE))
+
+statemilk2
+
+```
+
+```{r, echo = FALSE, message = FALSE}
+
+most <-milk1996 %>%
+
+  group_by(state)%>%
+
+  summarise(max=max(milk_million))
+
+  #arrange((milk_million))
+
+
+
+#library(dplyr)
+
+most[with(most, order(-max)), ]
+
+```
+
+```{r, echo = FALSE, message = FALSE}
+
+least <-milk1996%>%
+
+  group_by(state)%>%
+
+  summarise(min=min(milk_million))
+
+  #arrange((milk_million))
+
+  
+
+least
+
+
+#library(dplyr)
+
+least[with(least, order(min)), ] 
+
+```
+
+###Max Ward
+```{r, echo = FALSE, message = FALSE}
+
+milk1998 <- milk %>%
+
+  filter(year == 1998)
+
+ggplot(data = milk1998, aes(x = milk_million)) +
+
+  geom_density() + 
+
+  ggtitle('Distribution estimate of milk produced in 1998 by state')
+
+```
+
+```{r, echo = FALSE, message = FALSE}
+
+Individual_Part2 <- milk %>%
+
+  filter(year == 1998) %>%
+
+  summarize(average = mean(milk_million),middle = median(milk_million),
+
+            max(milk_million),min(milk_million))
+Individual_Part2
+
+```
+
+```{r, echo = FALSE, message = FALSE}
+
+statemilk <- milk1998 %>%
+
+group_by(state)%>%
+
+summarise(medianproduction = median(milk_million, na.rm = TRUE))
+
+statemilk
+
+```
+
+```{r, echo = FALSE, message = FALSE}
+
+statemilk2 <- milk1998 %>%
+
+group_by(state)%>%
+
+summarise(avgproduction = mean(milk_million, na.rm = TRUE))
+
+statemilk2
+
+```
+
+###Lucas Brack
+```{r, echo = FALSE, message = FALSE}
+birthMilk <- milk %>%
+filter(year %in% c('2000'))
+```
+
+```{r, echo = FALSE, message = FALSE}
+ggplot(data= birthMilk, aes(x = milk_million, fill=state)) +
+  geom_histogram(bins = 30) +
+  xlim(0, 33000)+
+  ylim(0, 14)+
+  labs(title="Histogram of milk produced in 2000 by state",x="Millions of lbs of Milk Produced" )
+```
+
+```{r, echo = FALSE, message = FALSE}
+birthSum <- birthMilk %>%
+  summarize(mean(milk_million), median(milk_million), max(milk_million), min(milk_million))
+birthSum
+```
